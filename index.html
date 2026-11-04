@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ADAITS | Generador de tokens</title>
+  <meta name="theme-color" content="#0b1223">
+  <title>ADAITS | Reto de tokens · 15 segundos</title>
 
   <style>
     :root {
@@ -29,14 +30,14 @@
       max-width: 650px;
       padding: 30px 22px;
       text-align: center;
-      border: 1px solid #ffffff22;
-      border-radius: 20px;
       background: radial-gradient(
         ellipse at top,
         #204776,
         #152642 48%,
         #0b1223
       );
+      border: 1px solid #ffffff22;
+      border-radius: 18px;
       overflow: hidden;
     }
 
@@ -46,47 +47,42 @@
 
     h1 {
       font-size: clamp(23px, 5vw, 32px);
-      margin: 12px 0;
       line-height: 1.2;
+      margin: 12px 0;
+      font-weight: 850;
     }
 
     .subtitle {
-      color: #7dd3fc;
       font-size: 13px;
       font-weight: 750;
+      color: #7dd3fc;
     }
 
     .intro {
-      color: #cbd5e1;
       font-size: 13px;
       line-height: 1.6;
-      margin: 15px 0 25px;
+      color: #cbd5e1;
+      margin: 15px 0 23px;
     }
 
-    /* CONTADOR */
+    /* CONTADOR DE TOKENS */
 
-    .counter-area {
+    .counter {
       position: relative;
       isolation: isolate;
-      padding: 16px 10px 5px;
+      padding: 14px 8px 7px;
     }
 
-    .big-number {
+    .big {
       display: inline-block;
       position: relative;
       z-index: 2;
       color: #7dd3fc;
-      font-size: clamp(68px, 13vw, 100px);
+      font-size: clamp(74px, 14vw, 108px);
       font-weight: 850;
-      line-height: 1.1;
       letter-spacing: -3px;
       font-variant-numeric: tabular-nums;
-    }
-
-    .denom {
-      color: #94a3b8;
-      font-size: clamp(28px, 6vw, 39px);
-      letter-spacing: 0;
+      line-height: 1.1;
     }
 
     .count-label {
@@ -99,64 +95,10 @@
       font-size: 15px;
     }
 
-    .milestone {
-      min-height: 24px;
-      margin: 13px 0 2px;
-      color: #93c5fd;
-      font-size: 14px;
-      font-weight: 750;
-    }
+    /* ICONO HEXAGONAL */
 
-    .milestone.celebrate {
-      color: #fde68a;
-      animation: message-pop .55s ease-out;
-    }
-
-    /* CRONÓMETRO Y BARRA */
-
-    .clock {
-      color: #cbd5e1;
-      font-size: 14px;
-      margin: 16px 0 8px;
-    }
-
-    .clock strong {
-      color: #fff;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .clock .limit {
-      color: #94a3b8;
-      font-size: 12px;
-    }
-
-    .time-warning {
-      color: #fbbf24;
-      font-size: 12px;
-      font-weight: 800;
-      margin: 8px 0;
-    }
-
-    .track {
-      height: 12px;
-      margin: 21px 0 25px;
-      overflow: hidden;
-      border-radius: 99px;
-      background: #34455c;
-    }
-
-    #progress {
-      height: 100%;
-      width: 0;
-      border-radius: 99px;
-      background: linear-gradient(90deg, #0284c7, #38bdf8);
-      transition: width .2s;
-    }
-
-    /* TOKEN HEXAGONAL */
-
-    .token-icon,
-    .flying-token {
+    .token,
+    .particle {
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -174,74 +116,147 @@
       font-weight: 900;
     }
 
-    .token-icon.small {
+    .mini {
       width: 23px;
       height: 24px;
       font-size: 13px;
     }
 
-    .token-icon.large {
+    .large {
       width: 36px;
       height: 39px;
       font-size: 21px;
     }
 
-    /* BOTÓN PRINCIPAL */
+    .milestone {
+      margin: 13px 0 2px;
+      color: #93c5fd;
+      font-size: 14px;
+      font-weight: 750;
+      min-height: 24px;
+    }
+
+    .milestone.pop {
+      animation: message-pop .55s ease-out;
+      color: #fde68a;
+    }
+
+    /* CRONÓMETRO DE 15 SEGUNDOS */
+
+    .clock-wrap {
+      margin: 16px 0 0;
+    }
+
+    .clock-label {
+      font-size: 13px;
+      color: #cbd5e1;
+      font-weight: 750;
+    }
+
+    .clock {
+      font-size: clamp(36px, 8vw, 48px);
+      font-weight: 900;
+      color: #f8fafc;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+      margin: 4px 0;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #94a3b8;
+      min-height: 18px;
+    }
+
+    /* ÚLTIMOS 5 SEGUNDOS EN AMARILLO */
+
+    .clock-wrap.urgent .clock {
+      color: #fbbf24;
+      animation: urgent-pulse .7s ease-in-out infinite;
+    }
+
+    .clock-wrap.urgent .hint {
+      color: #fbbf24;
+      font-weight: 800;
+    }
+
+    @keyframes urgent-pulse {
+      50% {
+        opacity: .6;
+        transform: scale(1.05);
+        text-shadow: 0 0 24px #fbbf24a0;
+      }
+    }
+
+    /* BARRA DE TIEMPO */
+
+    .track {
+      height: 12px;
+      background: #34455c;
+      overflow: hidden;
+      border-radius: 99px;
+      margin: 19px 0 27px;
+    }
+
+    #progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      border-radius: 99px;
+    }
+
+    /* BOTÓN GENERAR TOKEN */
 
     button {
       font: inherit;
-      cursor: pointer;
       font-weight: 800;
+      cursor: pointer;
       border-radius: 12px;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: default;
     }
 
     button:not(:disabled):active {
       transform: scale(.97);
     }
 
-    .main-button {
+    .generate {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 13px;
       width: 100%;
-      min-height: 82px;
-      padding: 19px 12px;
-      border: 2px solid #fbbf24;
+      min-height: 83px;
+      padding: 17px 12px;
       background: linear-gradient(180deg, #fbbf24, #fb923c);
-      box-shadow: 0 5px 0 #b45309, 0 10px 24px #0004;
+      border: 2px solid #fbbf24;
       color: #451a03;
       font-size: clamp(19px, 4.2vw, 24px);
+      box-shadow: 0 5px 0 #b45309, 0 10px 24px #0004;
+      touch-action: manipulation;
     }
 
     .plus {
-      min-width: 48px;
-      padding: 7px 12px;
+      color: white;
+      background: #78350f;
       border: 1px solid #92400e;
       border-radius: 99px;
-      background: #78350f;
-      color: white;
+      padding: 7px 12px;
       font-size: 17px;
+      min-width: 48px;
     }
 
-    /* EXPLOSIÓN DE TOKENS */
+    /* EXPLOSIÓN CADA 5 TOKENS */
 
-    .burst-area {
+    .particles {
       position: absolute;
       inset: 0;
-      pointer-events: none;
       z-index: 4;
+      pointer-events: none;
     }
 
-    .flying-token {
+    .particle {
       position: absolute;
-      top: 35%;
       left: 50%;
+      top: 35%;
       width: var(--size);
       height: var(--size);
       font-size: calc(var(--size) * .52);
@@ -249,11 +264,11 @@
       animation: token-fly 1.15s ease-out forwards;
     }
 
-    .big-number.boom {
+    .big.boom {
       animation: number-boom .7s ease-out;
     }
 
-    .counter-area.glow::before {
+    .counter.glow::before {
       content: "";
       position: absolute;
       inset: 4% 14%;
@@ -264,6 +279,7 @@
         #38bdf825 38%,
         transparent 73%
       );
+      z-index: 0;
       animation: halo .9s ease-out forwards;
     }
 
@@ -272,9 +288,11 @@
         opacity: 0;
         transform: translate(-50%, -50%) scale(.3);
       }
+
       15%, 65% {
         opacity: 1;
       }
+
       100% {
         opacity: 0;
         transform: translate(
@@ -289,11 +307,13 @@
         transform: scale(1);
         color: #7dd3fc;
       }
+
       28% {
         transform: scale(1.23);
         color: #e0f2fe;
         text-shadow: 0 0 38px #38bdf8;
       }
+
       100% {
         transform: scale(1);
         color: #7dd3fc;
@@ -305,10 +325,12 @@
         opacity: .2;
         transform: scale(.86);
       }
+
       45% {
         opacity: 1;
         transform: scale(1.1);
       }
+
       100% {
         opacity: 1;
         transform: scale(1);
@@ -320,71 +342,86 @@
         opacity: 0;
         transform: scale(.5);
       }
-      40% { opacity: 1; }
+
+      40% {
+        opacity: 1;
+      }
+
       100% {
         opacity: 0;
         transform: scale(1.3);
       }
     }
 
-    /* VICTORIA */
+    /* RESULTADO FINAL */
 
-    .victory {
-      padding: 29px 18px;
-      margin: 21px 0 26px;
+    .result {
+      padding: 19px 18px 30px;
+      margin: 20px 0 26px;
+      background: linear-gradient(160deg, #065f46, #064e3b);
       border: 1px solid #34d399;
       border-radius: 15px;
-      background: linear-gradient(160deg, #065f46, #064e3b);
       box-shadow: 0 0 28px #34d39918;
-      animation: win-in .55s ease-out;
+      animation: result-in .45s ease-out;
     }
 
-    .trophy { font-size: 53px; }
+    .replay {
+      display: block;
+      margin: 0 auto 21px;
+      padding: 12px 22px;
+      min-height: 43px;
+      color: white;
+      background: #047857;
+      border: 1px solid #6ee7b7;
+    }
 
-    .victory h2 {
+    .trophy {
+      font-size: 53px;
+    }
+
+    .result h2 {
       font-size: clamp(21px, 5vw, 27px);
       margin: 12px 0 8px;
     }
 
-    .victory p {
+    .result p {
       color: #d1fae5;
       font-size: 14px;
+      margin-bottom: 4px;
     }
 
-    .time-label {
-      margin: 24px 0 6px;
+    .result-count {
+      font-size: clamp(76px, 16vw, 110px);
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      color: #6ee7b7;
+      text-shadow: 0 0 27px #34d39955;
+      line-height: 1.15;
+    }
+
+    .result-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       color: #a7f3d0;
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 750;
     }
 
-    .final-time {
-      color: #6ee7b7;
-      font-size: clamp(47px, 11vw, 69px);
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-      text-shadow: 0 0 27px #34d39955;
-    }
-
-    .final-note {
-      margin-top: 8px;
+    .result-message {
+      margin-top: 18px;
       color: #fde68a;
-      font-size: 12px;
+      font-size: 14px;
+      font-weight: 800;
     }
 
-    .again {
-      margin-top: 22px;
-      padding: 13px 22px;
-      border: 1px solid #6ee7b7;
-      background: #047857;
-      color: white;
-    }
-
-    @keyframes win-in {
+    @keyframes result-in {
       from {
         opacity: 0;
         transform: translateY(12px) scale(.96);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -395,47 +432,60 @@
 
     .bottom {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       gap: 12px;
+      margin: 27px 0 18px;
       color: #b4c5d9;
       font-size: 12px;
-      margin: 27px 0 18px;
     }
 
     .reset {
       padding: 9px 13px;
-      border: 1px solid #64748b;
       background: transparent;
+      border: 1px solid #64748b;
       color: #e2e8f0;
       font-size: 12px;
     }
 
     .footer {
-      padding-top: 17px;
-      margin-top: 18px;
       border-top: 1px solid #34455c;
+      margin-top: 18px;
+      padding-top: 17px;
       color: #94a3b8;
       font-size: 11px;
       line-height: 1.9;
     }
 
+    /* ACCESIBILIDAD Y MÓVILES */
+
     @media (prefers-reduced-motion: reduce) {
-      .flying-token,
-      .big-number.boom,
-      .milestone.celebrate,
-      .counter-area.glow::before,
-      .victory {
+      .particle,
+      .big.boom,
+      .milestone.pop,
+      .counter.glow::before,
+      .result,
+      .clock-wrap.urgent .clock {
         animation: none;
       }
-      .flying-token { display: none; }
-      #progress { transition: none; }
+
+      .particle {
+        display: none;
+      }
     }
 
     @media (max-width: 400px) {
-      .game { padding: 23px 12px; }
-      .main-button { gap: 8px; }
-      .plus { padding: 6px 9px; }
+      .game {
+        padding: 23px 12px;
+      }
+
+      .generate {
+        gap: 8px;
+      }
+
+      .plus {
+        padding: 6px 9px;
+      }
     }
   </style>
 </head>
@@ -444,109 +494,161 @@
   <main class="game">
 
     <div class="cloud">☁️</div>
+
     <h1>Cloud Computing en acción</h1>
-    <div class="subtitle">Demo ADAITS · 1.º DAW + IA</div>
+
+    <div class="subtitle">
+      Demo ADAITS · 1.º DAW + IA
+    </div>
 
     <p class="intro">
-      Una web publicada en <strong>Microsoft Azure</strong>,
+      Una web publicada en
+      <strong>Microsoft Azure</strong>,
       sin administrar servidores.
     </p>
 
-    <!-- JUEGO -->
+    <!-- PANTALLA DE JUEGO -->
+
     <section id="play">
-      <div class="counter-area" id="counterArea">
 
-        <div class="burst-area" id="burst" aria-hidden="true"></div>
+      <div class="counter" id="counter">
 
-        <div class="big-number" id="bigNumber">
-          <span id="count">0</span><span class="denom">/20</span>
+        <div class="particles"
+             id="particles"
+             aria-hidden="true"></div>
+
+        <div class="big" id="big">
+          <span id="count">0</span>
         </div>
 
         <div class="count-label">
-          <span class="token-icon small">T</span>
+          <span class="token mini">T</span>
           Tokens generados
         </div>
 
-        <div class="milestone" id="milestone" aria-live="polite">
-          ¡Genera 20 tokens!
+        <div class="milestone" id="message">
+          ¿Cuántos tokens generas en 15 segundos?
         </div>
+
       </div>
 
-      <div class="clock">
-        ⏱ Tiempo:
-        <strong id="clock">00:00.0</strong>
-        <span class="limit">/ 02:00.0</span>
-      </div>
+      <div class="clock-wrap" id="clockWrap">
 
-      <div class="time-warning" id="timeWarning" hidden>
-        ⏳ Tiempo máximo alcanzado
+        <div class="clock-label">
+          ⏱ Tiempo restante
+        </div>
+
+        <div class="clock" id="clock">
+          00:15.0
+        </div>
+
+        <div class="hint" id="hint">
+          El cronómetro empieza con tu primer clic
+        </div>
+
       </div>
 
       <div class="track">
         <div id="progress"></div>
       </div>
 
-      <button type="button" class="main-button" id="generateBtn">
-        <span class="token-icon large">T</span>
+      <button
+        type="button"
+        class="generate"
+        id="generate"
+      >
+        <span class="token large">T</span>
         <span>¡Generar token!</span>
         <span class="plus">+1</span>
       </button>
+
     </section>
 
-    <!-- PANTALLA FINAL -->
-    <section class="victory" id="victory" hidden>
-      <div class="trophy">🏆</div>
-      <h2>¡Objetivo conseguido!</h2>
-      <p>¡Has generado 20 tokens!</p>
+    <!-- RESULTADO FINAL -->
 
-      <div class="time-label">⏱ Tiempo total</div>
-      <div class="final-time" id="finalTime">00:00.0</div>
-      <div class="final-note" id="finalNote"></div>
+    <section class="result" id="result" hidden>
 
-      <button type="button" class="again" id="againBtn">
+      <button
+        class="replay"
+        id="again"
+        type="button"
+      >
         ↻ Volver a jugar
       </button>
+
+      <div class="trophy">🏆</div>
+
+      <h2>¡Tiempo terminado!</h2>
+
+      <p>Has generado un total de</p>
+
+      <div class="result-count" id="finalCount">
+        0
+      </div>
+
+      <div class="result-label">
+        <span class="token mini">T</span>
+        tokens en 15 segundos
+      </div>
+
+      <div class="result-message">
+        ¿Puedes superar tu marca?
+      </div>
+
     </section>
 
+    <!-- REINICIO Y PIE -->
+
     <div class="bottom">
-      <span>🎯 Objetivo: 20 tokens</span>
-      <button type="button" class="reset" id="resetBtn">
+
+      <span>⚡ Reto: generar tokens en 15 s</span>
+
+      <button
+        class="reset"
+        id="reset"
+        type="button"
+      >
         ↻ Reiniciar
       </button>
+
     </div>
 
     <div class="footer">
       GitHub → Azure → Internet
       <br>
-      Sin backend ni base de datos · Al recargar empiezas de cero.
+      Sin backend ni base de datos ·
+      Al recargar empiezas de cero.
     </div>
 
   </main>
 
   <script>
     (() => {
+
       const $ = id => document.getElementById(id);
 
-      // CONFIGURACIÓN DEL JUEGO
-      const GOAL = 20;
-      const BURST_EVERY = 5;
-      const MAX_TIME = 60000; // 1 minuto
+      // CONFIGURACIÓN
+      const DURATION = 15000;    // 15 segundos
+      const WARNING = 5000;      // Últimos 5 segundos
+      const BURST_EVERY = 5;     // Explosión cada 5 tokens
 
+      // ESTADO DEL JUEGO
       let count = 0;
       let startedAt = null;
-      let endedAt = null;
       let finished = false;
-      let victoryTimer = null;
+      let interval = null;
       let messageTimer = null;
 
-      // FORMATO DEL CRONÓMETRO
-      function formatTime(ms) {
-        const capped = Math.min(
-          MAX_TIME,
-          Math.max(0, ms)
+      // FORMATO DEL TIEMPO
+      function formatClock(ms) {
+
+        const remaining = Math.max(
+          0,
+          Math.min(DURATION, ms)
         );
 
-        const seconds = Math.floor(capped / 1000);
+        const seconds = Math.floor(remaining / 1000);
+
         const minutes = String(
           Math.floor(seconds / 60)
         ).padStart(2, '0');
@@ -556,39 +658,47 @@
         ).padStart(2, '0');
 
         const tenths = Math.floor(
-          (capped % 1000) / 100
+          (remaining % 1000) / 100
         );
 
         return minutes + ':' + secs + '.' + tenths;
       }
 
-      // REINICIAR UNA ANIMACIÓN
+      // REINICIAR ANIMACIÓN
       function replay(element, className) {
+
         element.classList.remove(className);
+
         void element.offsetWidth;
+
         element.classList.add(className);
       }
 
-      // EXPLOSIÓN CADA 5 TOKENS
+      // EXPLOSIÓN DE TOKENS
       function explode() {
-        replay($('bigNumber'), 'boom');
-        replay($('counterArea'), 'glow');
-        replay($('milestone'), 'celebrate');
 
-        if (window.matchMedia(
+        replay($('big'), 'boom');
+        replay($('counter'), 'glow');
+        replay($('message'), 'pop');
+
+        const reducedMotion = window.matchMedia(
           '(prefers-reduced-motion: reduce)'
-        ).matches) return;
+        ).matches;
 
-        const area = $('burst');
+        if (reducedMotion) return;
+
+        const container = $('particles');
 
         for (let i = 0; i < 20; i++) {
+
           const token = document.createElement('span');
 
-          token.className = 'flying-token';
-          token.textContent = 'T';
-
           const angle = i * Math.PI / 10;
-          const distance = 95 + Math.random() * 110;
+
+          const distance = 95 + Math.random() * 100;
+
+          token.className = 'particle';
+          token.textContent = 'T';
 
           token.style.setProperty(
             '--dx',
@@ -615,130 +725,176 @@
             Math.round(19 + Math.random() * 17) + 'px'
           );
 
-          area.appendChild(token);
+          container.appendChild(token);
+
           setTimeout(() => token.remove(), 1250);
         }
       }
 
       // ACTUALIZAR PANTALLA
       function render(now = performance.now()) {
-        $('count').textContent = count;
-
-        $('progress').style.width =
-          (count / GOAL * 100) + '%';
 
         const elapsed = startedAt === null
           ? 0
-          : (endedAt ?? now) - startedAt;
+          : Math.min(DURATION, now - startedAt);
 
-        $('clock').textContent = formatTime(elapsed);
-        $('timeWarning').hidden = elapsed < MAX_TIME;
-        $('generateBtn').disabled = finished;
+        const remaining = DURATION - elapsed;
+
+        $('count').textContent = count;
+
+        $('clock').textContent = formatClock(remaining);
+
+        $('progress').style.width =
+          (100 * elapsed / DURATION) + '%';
+
+        // Activar amarillo solo en últimos 5 segundos
+        const urgent =
+          startedAt !== null &&
+          remaining <= WARNING &&
+          !finished;
+
+        $('clockWrap').classList.toggle(
+          'urgent',
+          urgent
+        );
+
+        $('hint').textContent = startedAt === null
+          ? 'El cronómetro empieza con tu primer clic'
+          : urgent
+            ? '¡Últimos 5 segundos!'
+            : '¡Sigue generando tokens!';
       }
 
-      // GENERAR UN TOKEN
+      // FINALIZAR LA PARTIDA
+      function finish() {
+
+        if (finished) return;
+
+        finished = true;
+
+        if (interval !== null) {
+          clearInterval(interval);
+          interval = null;
+        }
+
+        clearTimeout(messageTimer);
+
+        $('finalCount').textContent = count;
+
+        // Sustituir juego por panel verde
+        $('play').hidden = true;
+        $('result').hidden = false;
+      }
+
+      // GENERAR TOKEN
       function generateToken() {
+
         if (finished) return;
 
         const now = performance.now();
 
-        // El tiempo empieza con el primer clic
+        // No permitir tokens fuera de tiempo
+        if (
+          startedAt !== null &&
+          now - startedAt >= DURATION
+        ) {
+          finish();
+          return;
+        }
+
+        // El cronómetro comienza con el primer clic
         if (startedAt === null) {
+
           startedAt = now;
+
+          interval = setInterval(() => {
+
+            const current = performance.now();
+
+            if (current - startedAt >= DURATION) {
+              finish();
+            } else {
+              render(current);
+            }
+
+          }, 50);
         }
 
         count++;
 
-        // Explosión en 5, 10, 15 y 20
+        // Explosión cada 5 tokens
         if (count % BURST_EVERY === 0) {
-          $('milestone').textContent = count === GOAL
-            ? '🎉 ¡20 tokens! ¡Objetivo cumplido!'
-            : '🎉 ¡' + count + ' tokens! ¡Explosión!';
+
+          $('message').textContent =
+            '🎉 ¡' + count + ' tokens! ¡Explosión!';
 
           explode();
+
           clearTimeout(messageTimer);
 
-          if (count < GOAL) {
-            messageTimer = setTimeout(() => {
-              $('milestone').textContent =
+          messageTimer = setTimeout(() => {
+
+            if (!finished) {
+              $('message').textContent =
                 '¡Sigue generando tokens!';
-            }, 1700);
-          }
-        }
+            }
 
-        // OBJETIVO CONSEGUIDO
-        if (count === GOAL) {
-          endedAt = now;
-          finished = true;
-
-          clearTimeout(messageTimer);
-
-          // Esperar a que termine la última explosión
-          const reducedMotion = window.matchMedia(
-            '(prefers-reduced-motion: reduce)'
-          ).matches;
-
-          const delay = reducedMotion ? 0 : 1250;
-
-          victoryTimer = setTimeout(() => {
-            $('finalTime').textContent = formatTime(
-              endedAt - startedAt
-            );
-
-            $('finalNote').textContent =
-              endedAt - startedAt >= MAX_TIME
-                ? '⏳ Tiempo máximo alcanzado'
-                : '';
-
-            $('play').hidden = true;
-            $('victory').hidden = false;
-          }, delay);
+          }, 1700);
         }
 
         render(now);
       }
 
       // REINICIAR
-      function reset() {
-        clearTimeout(victoryTimer);
+      function resetGame() {
+
+        if (interval !== null) {
+          clearInterval(interval);
+          interval = null;
+        }
+
         clearTimeout(messageTimer);
 
         count = 0;
         startedAt = null;
-        endedAt = null;
         finished = false;
 
-        $('burst').replaceChildren();
-        $('bigNumber').classList.remove('boom');
-        $('counterArea').classList.remove('glow');
-        $('milestone').classList.remove('celebrate');
+        $('particles').replaceChildren();
 
-        $('milestone').textContent = '¡Genera 20 tokens!';
+        $('big').classList.remove('boom');
+        $('counter').classList.remove('glow');
+        $('message').classList.remove('pop');
+
+        $('message').textContent =
+          '¿Cuántos tokens generas en 15 segundos?';
 
         $('play').hidden = false;
-        $('victory').hidden = true;
+        $('result').hidden = true;
 
         render();
       }
 
       // EVENTOS
-      $('generateBtn').addEventListener(
+      $('generate').addEventListener(
         'click',
         generateToken
       );
 
-      $('resetBtn').addEventListener('click', reset);
-      $('againBtn').addEventListener('click', reset);
+      $('reset').addEventListener(
+        'click',
+        resetGame
+      );
 
-      // ACTUALIZAR CRONÓMETRO
-      setInterval(() => {
-        if (startedAt !== null && !finished) {
-          render();
-        }
-      }, 100);
+      $('again').addEventListener(
+        'click',
+        resetGame
+      );
 
+      // ESTADO INICIAL
       render();
+
     })();
   </script>
+
 </body>
 </html>
