@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,534 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1223">
   <title>ADAITS | Reto de tokens</title>
-
   <style>
-    :root {
-      color-scheme: dark;
-      font-family: system-ui, -apple-system,
-                   "Segoe UI", sans-serif;
-    }
-
+    :root { color-scheme: dark; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
     * { box-sizing: border-box; }
-
-    body {
-      min-height: 100vh;
-      margin: 0;
-      padding: 22px 12px;
-      display: grid;
-      place-items: center;
-      background: #0b1223;
-      color: #f8fafc;
-    }
-
-    .game {
-      width: 100%;
-      max-width: 650px;
-      padding: 30px 22px;
-      text-align: center;
-      border: 1px solid #ffffff22;
-      border-radius: 18px;
-      overflow: hidden;
-      background: radial-gradient(
-        ellipse at top,
-        #204776,
-        #152642 48%,
-        #0b1223
-      );
-    }
-
+    body { min-height: 100vh; margin: 0; padding: 22px 12px; display: grid;
+      place-items: center; background: #0b1223; color: #f8fafc; }
+    .game { width: 100%; max-width: 650px; padding: 30px 22px; text-align: center;
+      border: 1px solid #ffffff22; border-radius: 18px; overflow: hidden;
+      background: radial-gradient(ellipse at top, #204776, #152642 48%, #0b1223); }
     [hidden] { display: none !important; }
-
     .cloud { font-size: 47px; }
+    h1 { font-size: clamp(23px, 5vw, 32px); margin: 12px 0; line-height: 1.2; }
+    .subtitle { font-size: 13px; font-weight: 750; color: #7dd3fc; }
+    .intro { font-size: 13px; line-height: 1.6; color: #cbd5e1; margin: 15px 0 23px; }
 
-    h1 {
-      font-size: clamp(23px, 5vw, 32px);
-      margin: 12px 0;
-      line-height: 1.2;
-    }
+    .counter { position: relative; isolation: isolate; padding: 14px 8px 7px; }
+    .big { display: inline-block; position: relative; z-index: 2;
+      font-size: clamp(74px, 14vw, 108px); font-weight: 850;
+      letter-spacing: -3px; font-variant-numeric: tabular-nums;
+      line-height: 1.1; color: #7dd3fc; }
+    .count-label { display: flex; justify-content: center; align-items: center;
+      gap: 8px; margin: 8px 0; color: #dbeafe; font-size: 15px; }
+    .token, .particle { display: inline-flex; justify-content: center; align-items: center;
+      flex-shrink: 0; clip-path: polygon(50% 0%, 94% 25%, 94% 75%,
+      50% 100%, 6% 75%, 6% 25%); background: linear-gradient(140deg, #7dd3fc, #2563eb);
+      color: #e0f2fe; font-weight: 900; }
+    .mini { width: 23px; height: 24px; font-size: 13px; }
+    .large { width: 36px; height: 39px; font-size: 21px; }
+    .milestone { min-height: 24px; margin: 13px 0 2px; color: #93c5fd;
+      font-size: 14px; font-weight: 750; }
+    .milestone.pop { color: #fde68a; animation: pop .55s ease-out; }
 
-    .subtitle {
-      font-size: 13px;
-      font-weight: 750;
-      color: #7dd3fc;
-    }
+    .clock-wrap { margin: 16px 0 0; }
+    .clock-label { font-size: 13px; color: #cbd5e1; font-weight: 750; }
+    .clock { font-size: clamp(36px, 8vw, 48px); font-weight: 900;
+      color: white; font-variant-numeric: tabular-nums; margin: 4px 0; }
+    .hint { font-size: 12px; color: #94a3b8; min-height: 18px; }
+    .clock-wrap.urgent .clock { color: #fbbf24; animation: urgent .7s ease-in-out infinite; }
+    .clock-wrap.urgent .hint { color: #fbbf24; font-weight: 800; }
+    .track { height: 12px; margin: 19px 0 27px; border-radius: 99px;
+      overflow: hidden; background: #34455c; }
+    #progress { height: 100%; width: 0; border-radius: 99px;
+      background: linear-gradient(90deg, #0284c7, #38bdf8); }
 
-    .intro {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #cbd5e1;
-      margin: 15px 0 23px;
-    }
-
-    /* CONTADOR */
-
-    .counter {
-      position: relative;
-      isolation: isolate;
-      padding: 14px 8px 7px;
-    }
-
-    .big {
-      display: inline-block;
-      position: relative;
-      z-index: 2;
-      font-size: clamp(74px, 14vw, 108px);
-      font-weight: 850;
-      letter-spacing: -3px;
-      font-variant-numeric: tabular-nums;
-      line-height: 1.1;
-      color: #7dd3fc;
-    }
-
-    .count-label {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      margin: 8px 0;
-      color: #dbeafe;
-      font-size: 15px;
-    }
-
-    .token, .particle {
-      display: inline-flex;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      clip-path: polygon(
-        50% 0%,
-        94% 25%,
-        94% 75%,
-        50% 100%,
-        6% 75%,
-        6% 25%
-      );
-      background: linear-gradient(
-        140deg, #7dd3fc, #2563eb
-      );
-      color: #e0f2fe;
-      font-weight: 900;
-    }
-
-    .mini {
-      width: 23px;
-      height: 24px;
-      font-size: 13px;
-    }
-
-    .large {
-      width: 36px;
-      height: 39px;
-      font-size: 21px;
-    }
-
-    .milestone {
-      min-height: 24px;
-      margin: 13px 0 2px;
-      color: #93c5fd;
-      font-size: 14px;
-      font-weight: 750;
-    }
-
-    .milestone.pop {
-      color: #fde68a;
-      animation: pop .55s ease-out;
-    }
-
-    /* CRONÓMETRO */
-
-    .clock-wrap {
-      margin: 16px 0 0;
-    }
-
-    .clock-label {
-      font-size: 13px;
-      color: #cbd5e1;
-      font-weight: 750;
-    }
-
-    .clock {
-      font-size: clamp(36px, 8vw, 48px);
-      font-weight: 900;
-      color: white;
-      font-variant-numeric: tabular-nums;
-      margin: 4px 0;
-    }
-
-    .hint {
-      font-size: 12px;
-      color: #94a3b8;
-      min-height: 18px;
-    }
-
-    .clock-wrap.urgent .clock {
-      color: #fbbf24;
-      animation: urgent .7s ease-in-out infinite;
-    }
-
-    .clock-wrap.urgent .hint {
-      color: #fbbf24;
-      font-weight: 800;
-    }
-
-    .track {
-      height: 12px;
-      margin: 19px 0 27px;
-      border-radius: 99px;
-      overflow: hidden;
-      background: #34455c;
-    }
-
-    #progress {
-      height: 100%;
-      width: 0;
-      border-radius: 99px;
-      background: linear-gradient(
-        90deg, #0284c7, #38bdf8
-      );
-    }
-
-    /* BOTÓN */
-
-    button {
-      font: inherit;
-      font-weight: 800;
-      cursor: pointer;
-      border-radius: 12px;
-    }
-
-    button:not(:disabled):active {
-      transform: scale(.97);
-    }
-
-    button:disabled {
-      opacity: .55;
-      cursor: default;
-    }
-
-    .generate {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 13px;
-      width: 100%;
-      min-height: 83px;
-      padding: 17px 12px;
-      background: linear-gradient(
-        180deg, #fbbf24, #fb923c
-      );
-      border: 2px solid #fbbf24;
-      color: #451a03;
+    button { font: inherit; font-weight: 800; cursor: pointer; border-radius: 12px; }
+    button:not(:disabled):active { transform: scale(.97); }
+    button:disabled { opacity: .55; cursor: default; }
+    .generate { display: flex; align-items: center; justify-content: center;
+      gap: 13px; width: 100%; min-height: 83px; padding: 17px 12px;
+      background: linear-gradient(180deg, #fbbf24, #fb923c);
+      border: 2px solid #fbbf24; color: #451a03;
       font-size: clamp(19px, 4.2vw, 24px);
-      box-shadow:
-        0 5px 0 #b45309,
-        0 10px 24px #0004;
-      touch-action: manipulation;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+      box-shadow: 0 5px 0 #b45309, 0 10px 24px #0004;
+      touch-action: manipulation; user-select: none; -webkit-tap-highlight-color: transparent; }
+    .plus { min-width: 48px; padding: 7px 12px; border-radius: 99px;
+      border: 1px solid #92400e; background: #78350f; color: white; font-size: 17px; }
 
-    .plus {
-      min-width: 48px;
-      padding: 7px 12px;
-      border-radius: 99px;
-      border: 1px solid #92400e;
-      background: #78350f;
-      color: white;
-      font-size: 17px;
-    }
+    .particles { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+    .particle { position: absolute; left: 50%; top: 35%; width: var(--size);
+      height: var(--size); font-size: calc(var(--size) * .52); opacity: 0;
+      animation: fly 1.15s ease-out forwards; }
+    .big.boom { animation: boom .7s ease-out; }
+    .counter.glow::before { content: ""; position: absolute; inset: 4% 14%;
+      z-index: 0; border-radius: 50%;
+      background: radial-gradient(circle, #38bdf890 0%, #38bdf825 38%, transparent 73%);
+      animation: halo .9s ease-out forwards; }
+    @keyframes fly { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.3); }
+      15%, 65% { opacity: 1; } 100% { opacity: 0;
+      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy)))
+      rotate(var(--rot)) scale(var(--scale)); } }
+    @keyframes boom { 28% { transform: scale(1.23); color: #e0f2fe;
+      text-shadow: 0 0 38px #38bdf8; } 100% { transform: scale(1); color: #7dd3fc; } }
+    @keyframes halo { 0% { opacity: 0; transform: scale(.5); }
+      40% { opacity: 1; } 100% { opacity: 0; transform: scale(1.3); } }
+    @keyframes pop { 0% { opacity: .2; transform: scale(.86); }
+      45% { opacity: 1; transform: scale(1.1); } 100% { transform: scale(1); } }
+    @keyframes urgent { 50% { opacity: .6; transform: scale(1.05);
+      text-shadow: 0 0 24px #fbbf24a0; } }
 
-    /* EXPLOSIONES */
+    /* Resultado normal: verde */
+    .result { padding: 19px 18px 30px; margin: 20px 0 26px;
+      border: 1px solid #34d399; border-radius: 15px;
+      background: linear-gradient(160deg, #065f46, #064e3b);
+      box-shadow: 0 0 28px #34d39918; animation: reveal .45s ease-out; }
+    .replay { display: block; margin: 0 auto 21px; min-height: 43px;
+      padding: 12px 22px; background: #047857;
+      color: white; border: 1px solid #6ee7b7; }
+    .trophy { font-size: 53px; }
+    .result h2 { margin: 12px 0 8px; font-size: clamp(21px, 5vw, 27px); }
+    .result p { margin-bottom: 4px; color: #d1fae5; font-size: 14px; }
+    .result-count { font-size: clamp(76px, 16vw, 110px); font-weight: 900;
+      font-variant-numeric: tabular-nums; color: #6ee7b7; line-height: 1.15;
+      text-shadow: 0 0 27px #34d39955; }
+    .result-label { display: flex; align-items: center; justify-content: center;
+      gap: 8px; color: #a7f3d0; font-size: 15px; font-weight: 750; }
+    .result-message { margin-top: 18px; color: #fde68a;
+      font-size: 14px; font-weight: 800; }
 
-    .particles {
-      position: absolute;
-      inset: 0;
-      z-index: 4;
-      pointer-events: none;
-    }
+    /* Récord de 100: dorado */
+    .result.gold { border: 2px solid #facc15;
+      background: radial-gradient(ellipse at top, #a16207, #713f12 62%, #422006);
+      box-shadow: 0 0 34px #facc1555, inset 0 0 24px #fde68a16; }
+    .result.gold .replay { background: #854d0e; color: #fff7cc;
+      border-color: #fde68a; }
+    .result.gold .trophy { filter: drop-shadow(0 0 15px #fde047bb); }
+    .result.gold h2 { color: #fef08a; }
+    .result.gold p { color: #fff1b6; }
+    .result.gold .result-count { color: #fef08a;
+      text-shadow: 0 0 30px #facc1599; }
+    .result.gold .result-label { color: #fef3c7; }
+    .result.gold .result-message { color: #fff7cc;
+      font-size: 18px; line-height: 1.5; }
+    .record-time { margin-top: 14px; font-size: 15px; color: #fef3c7; }
+    .record-time strong { display: block; margin-top: 5px; font-size: 32px;
+      color: #fef08a; font-variant-numeric: tabular-nums; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(12px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); } }
 
-    .particle {
-      position: absolute;
-      left: 50%;
-      top: 35%;
-      width: var(--size);
-      height: var(--size);
-      font-size: calc(var(--size) * .52);
-      opacity: 0;
-      animation: fly 1.15s ease-out forwards;
-    }
-
-    .big.boom {
-      animation: boom .7s ease-out;
-    }
-
-    .counter.glow::before {
-      content: "";
-      position: absolute;
-      inset: 4% 14%;
-      z-index: 0;
-      border-radius: 50%;
-      background: radial-gradient(
-        circle,
-        #38bdf890 0%,
-        #38bdf825 38%,
-        transparent 73%
-      );
-      animation: halo .9s ease-out forwards;
-    }
-
-    @keyframes fly {
-      0% {
-        opacity: 0;
-        transform:
-          translate(-50%, -50%) scale(.3);
-      }
-
-      15%, 65% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-        transform: translate(
-          calc(-50% + var(--dx)),
-          calc(-50% + var(--dy))
-        ) rotate(var(--rot)) scale(var(--scale));
-      }
-    }
-
-    @keyframes boom {
-      28% {
-        transform: scale(1.23);
-        color: #e0f2fe;
-        text-shadow: 0 0 38px #38bdf8;
-      }
-
-      100% {
-        transform: scale(1);
-        color: #7dd3fc;
-      }
-    }
-
-    @keyframes halo {
-      0% {
-        opacity: 0;
-        transform: scale(.5);
-      }
-
-      40% { opacity: 1; }
-
-      100% {
-        opacity: 0;
-        transform: scale(1.3);
-      }
-    }
-
-    @keyframes pop {
-      0% {
-        opacity: .2;
-        transform: scale(.86);
-      }
-
-      45% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-
-      100% {
-        transform: scale(1);
-      }
-    }
-
-    @keyframes urgent {
-      50% {
-        opacity: .6;
-        transform: scale(1.05);
-        text-shadow: 0 0 24px #fbbf24a0;
-      }
-    }
-
-    /* RESULTADO NORMAL: VERDE */
-
-    .result {
-      padding: 19px 18px 30px;
-      margin: 20px 0 26px;
-      border: 1px solid #34d399;
-      border-radius: 15px;
-      background: linear-gradient(
-        160deg, #065f46, #064e3b
-      );
-      box-shadow: 0 0 28px #34d39918;
-      animation: reveal .45s ease-out;
-    }
-
-    .replay {
-      display: block;
-      margin: 0 auto 21px;
-      min-height: 43px;
-      padding: 12px 22px;
-      background: #047857;
-      color: white;
-      border: 1px solid #6ee7b7;
-    }
-
-    .trophy {
-      font-size: 53px;
-    }
-
-    .result h2 {
-      margin: 12px 0 8px;
-      font-size: clamp(21px, 5vw, 27px);
-    }
-
-    .result p {
-      margin-bottom: 4px;
-      color: #d1fae5;
-      font-size: 14px;
-    }
-
-    .result-count {
-      font-size: clamp(76px, 16vw, 110px);
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-      color: #6ee7b7;
-      line-height: 1.15;
-      text-shadow: 0 0 27px #34d39955;
-    }
-
-    .result-label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: #a7f3d0;
-      font-size: 15px;
-      font-weight: 750;
-    }
-
-    .result-message {
-      margin-top: 18px;
-      color: #fde68a;
-      font-size: 14px;
-      font-weight: 800;
-    }
-
-    /* NUEVO: RÉCORD DORADO */
-
-    .result.gold {
-      border: 2px solid #facc15;
-      background: radial-gradient(
-        ellipse at top,
-        #a16207,
-        #713f12 62%,
-        #422006
-      );
-      box-shadow:
-        0 0 34px #facc1555,
-        inset 0 0 24px #fde68a16;
-    }
-
-    .result.gold .replay {
-      background: #854d0e;
-      color: #fff7cc;
-      border-color: #fde68a;
-    }
-
-    .result.gold .trophy {
-      filter: drop-shadow(0 0 15px #fde047bb);
-    }
-
-    .result.gold h2 {
-      color: #fef08a;
-    }
-
-    .result.gold p {
-      color: #fff1b6;
-    }
-
-    .result.gold .result-count {
-      color: #fef08a;
-      text-shadow: 0 0 30px #facc1599;
-    }
-
-    .result.gold .result-label {
-      color: #fef3c7;
-    }
-
-    .result.gold .result-message {
-      color: #fff7cc;
-      font-size: 18px;
-      line-height: 1.5;
-    }
-
-    .record-time {
-      margin-top: 14px;
-      font-size: 15px;
-      color: #fef3c7;
-    }
-
-    .record-time strong {
-      display: block;
-      margin-top: 5px;
-      font-size: 32px;
-      color: #fef08a;
-      font-variant-numeric: tabular-nums;
-    }
-
-    @keyframes reveal {
-      from {
-        opacity: 0;
-        transform: translateY(12px) scale(.96);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    /* PIE */
-
-    .bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin: 27px 0 18px;
-      color: #b4c5d9;
-      font-size: 12px;
-    }
-
-    .reset {
-      padding: 9px 13px;
-      background: transparent;
-      border: 1px solid #64748b;
-      color: #e2e8f0;
-      font-size: 12px;
-    }
-
-    .footer {
-      border-top: 1px solid #34455c;
-      margin-top: 18px;
-      padding-top: 17px;
-      color: #94a3b8;
-      font-size: 11px;
-      line-height: 1.9;
-    }
-
+    .bottom { display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin: 27px 0 18px; color: #b4c5d9; font-size: 12px; }
+    .reset { padding: 9px 13px; background: transparent;
+      border: 1px solid #64748b; color: #e2e8f0; font-size: 12px; }
+    .footer { border-top: 1px solid #34455c; margin-top: 18px; padding-top: 17px;
+      color: #94a3b8; font-size: 11px; line-height: 1.9; }
     @media (prefers-reduced-motion: reduce) {
-      .particle,
-      .big.boom,
-      .milestone.pop,
-      .counter.glow::before,
-      .clock-wrap.urgent .clock,
-      .result {
-        animation: none;
-      }
-
+      .particle, .big.boom, .milestone.pop, .counter.glow::before,
+      .clock-wrap.urgent .clock, .result { animation: none; }
       .particle { display: none; }
     }
-
     @media (max-width: 400px) {
       .game { padding: 23px 12px; }
       .generate { gap: 8px; }
@@ -541,482 +140,208 @@
     }
   </style>
 </head>
-
 <body>
   <main class="game">
-
     <div class="cloud">☁️</div>
-
     <h1>Cloud Computing en acción</h1>
-
-    <div class="subtitle">
-      Demo ADAITS · 1.º DAW + IA
-    </div>
-
-    <p class="intro">
-      Una web publicada en
-      <strong>Microsoft Azure</strong>,
-      sin administrar servidores.
-    </p>
-
-    <!-- PANTALLA DE JUEGO -->
+    <div class="subtitle">Demo ADAITS · 1.º DAW + IA</div>
+    <p class="intro">Una web publicada en <strong>Microsoft Azure</strong>, sin administrar servidores.</p>
 
     <section id="play">
-
       <div class="counter" id="counter">
-
-        <div
-          class="particles"
-          id="particles"
-          aria-hidden="true"
-        ></div>
-
-        <div class="big" id="big">
-          <span id="count">0</span>
-        </div>
-
-        <div class="count-label">
-          <span class="token mini">T</span>
-          Tokens generados
-        </div>
-
-        <div class="milestone" id="message">
-          ¿Cuántos tokens generas en 15 segundos?
-        </div>
-
+        <div class="particles" id="particles" aria-hidden="true"></div>
+        <div class="big" id="big"><span id="count">0</span></div>
+        <div class="count-label"><span class="token mini">T</span> Tokens generados</div>
+        <div class="milestone" id="message">¿Cuántos tokens generas en 15 segundos?</div>
       </div>
-
       <div class="clock-wrap" id="clockWrap">
-
-        <div class="clock-label">
-          ⏱ Tiempo restante
-        </div>
-
-        <div class="clock" id="clock">
-          00:15.0
-        </div>
-
-        <div class="hint" id="hint">
-          El cronómetro empieza con tu primer clic
-        </div>
-
+        <div class="clock-label">⏱ Tiempo restante</div>
+        <div class="clock" id="clock">00:15.0</div>
+        <div class="hint" id="hint">El cronómetro empieza con tu primer clic</div>
       </div>
-
-      <div class="track">
-        <div id="progress"></div>
-      </div>
-
-      <button
-        type="button"
-        class="generate"
-        id="generate"
-      >
-        <span class="token large">T</span>
-        <span>¡Generar token!</span>
-        <span class="plus">+1</span>
+      <div class="track"><div id="progress"></div></div>
+      <button type="button" class="generate" id="generate">
+        <span class="token large">T</span><span>¡Generar token!</span><span class="plus">+1</span>
       </button>
-
     </section>
 
-    <!-- RESULTADO VERDE O DORADO -->
-
     <section class="result" id="result" hidden>
-
-      <button
-        class="replay"
-        id="again"
-        type="button"
-      >
-        ↻ Volver a jugar
-      </button>
-
-      <div class="trophy" id="trophy">
-        🏆
-      </div>
-
-      <h2 id="resultTitle">
-        ¡Tiempo terminado!
-      </h2>
-
-      <p id="resultIntro">
-        Has generado un total de
-      </p>
-
-      <div class="result-count" id="finalCount">
-        0
-      </div>
-
-      <div class="result-label">
-        <span class="token mini">T</span>
-        <span id="resultLabel">
-          tokens en 15 segundos
-        </span>
-      </div>
-
-      <div class="result-message" id="resultMessage">
-        ¿Puedes superar tu marca?
-      </div>
-
-      <!-- TIEMPO RESTANTE: SOLO EN EL RÉCORD -->
-
+      <button class="replay" id="again" type="button">↻ Volver a jugar</button>
+      <div class="trophy" id="trophy">🏆</div>
+      <h2 id="resultTitle">¡Tiempo terminado!</h2>
+      <p id="resultIntro">Has generado un total de</p>
+      <div class="result-count" id="finalCount">0</div>
+      <div class="result-label"><span class="token mini">T</span><span id="resultLabel">tokens en 15 segundos</span></div>
+      <div class="result-message" id="resultMessage">¿Puedes superar tu marca?</div>
       <div class="record-time" id="recordTime" hidden>
-        ⏱ Tiempo que te ha sobrado
+        ⏱ Tiempo que quedaba al llegar a 100
         <strong id="remainingRecord">00:00.0</strong>
       </div>
-
     </section>
 
     <div class="bottom">
-      <span>
-        ⚡ Reto: 15 s · Récord especial: 100 tokens
-      </span>
-
-      <button
-        class="reset"
-        id="reset"
-        type="button"
-      >
-        ↻ Reiniciar
-      </button>
+      <span>⚡ Reto: 15 s · Récord especial: 100 tokens</span>
+      <button class="reset" id="reset" type="button">↻ Reiniciar</button>
     </div>
-
-    <div class="footer">
-      GitHub → Azure → Internet
-      <br>
-      Sin backend ni base de datos ·
-      Al recargar empiezas de cero.
-    </div>
-
+    <div class="footer">GitHub → Azure → Internet<br>
+      Sin backend ni base de datos · Al recargar empiezas de cero.</div>
   </main>
 
   <script>
     (() => {
       const $ = id => document.getElementById(id);
-
-      // CONFIGURACIÓN
       const DURATION = 15000;
       const WARNING = 5000;
       const BURST_EVERY = 5;
       const RECORD = 100;
+      let count = 0, startedAt = null, endedAt = null, finished = false;
+      let recordReachedAt = null;
+      let interval = null, messageTimer = null;
 
-      // ESTADO DEL JUEGO
-      let count = 0;
-      let startedAt = null;
-      let endedAt = null;
-      let finished = false;
-
-      let interval = null;
-      let messageTimer = null;
-      let resultTimer = null;
-
-      // FORMATO DEL RELOJ
       function formatClock(ms) {
-        const time = Math.max(
-          0,
-          Math.min(DURATION, ms)
-        );
-
+        const time = Math.max(0, Math.min(DURATION, ms));
         const seconds = Math.floor(time / 1000);
-
-        return (
-          String(Math.floor(seconds / 60))
-            .padStart(2, '0') +
-          ':' +
-          String(seconds % 60).padStart(2, '0') +
-          '.' +
-          Math.floor((time % 1000) / 100)
-        );
+        return String(Math.floor(seconds / 60)).padStart(2, '0') + ':' +
+          String(seconds % 60).padStart(2, '0') + '.' +
+          Math.floor((time % 1000) / 100);
       }
 
-      // REPETIR ANIMACIÓN
       function replay(element, className) {
         element.classList.remove(className);
-
         void element.offsetWidth;
-
         element.classList.add(className);
       }
 
-      // EXPLOSIÓN CADA 5 TOKENS
       function explode() {
         replay($('big'), 'boom');
         replay($('counter'), 'glow');
         replay($('message'), 'pop');
-
-        if (
-          window.matchMedia(
-            '(prefers-reduced-motion: reduce)'
-          ).matches
-        ) {
-          return;
-        }
-
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         const area = $('particles');
-
         for (let i = 0; i < 20; i++) {
           const token = document.createElement('span');
-
           const angle = i * Math.PI / 10;
           const distance = 95 + Math.random() * 100;
-
           token.className = 'particle';
           token.textContent = 'T';
-
-          token.style.setProperty(
-            '--dx',
-            Math.cos(angle) * distance + 'px'
-          );
-
-          token.style.setProperty(
-            '--dy',
-            Math.sin(angle) * distance + 'px'
-          );
-
-          token.style.setProperty(
-            '--rot',
-            (Math.random() * 480 - 240) + 'deg'
-          );
-
-          token.style.setProperty(
-            '--scale',
-            (0.7 + Math.random() * .9).toFixed(2)
-          );
-
-          token.style.setProperty(
-            '--size',
-            Math.round(19 + Math.random() * 17) + 'px'
-          );
-
+          token.style.setProperty('--dx', Math.cos(angle) * distance + 'px');
+          token.style.setProperty('--dy', Math.sin(angle) * distance + 'px');
+          token.style.setProperty('--rot', (Math.random() * 480 - 240) + 'deg');
+          token.style.setProperty('--scale', (0.7 + Math.random() * .9).toFixed(2));
+          token.style.setProperty('--size', Math.round(19 + Math.random() * 17) + 'px');
           area.appendChild(token);
-
           setTimeout(() => token.remove(), 1250);
         }
       }
 
-      // ACTUALIZAR LA PANTALLA
       function render(now = performance.now()) {
-        const elapsed = startedAt === null
-          ? 0
-          : Math.min(
-              DURATION,
-              (endedAt ?? now) - startedAt
-            );
-
+        const elapsed = startedAt === null ? 0 :
+          Math.min(DURATION, (endedAt ?? now) - startedAt);
         const remaining = DURATION - elapsed;
-
         $('count').textContent = count;
-
-        $('clock').textContent =
-          formatClock(remaining);
-
-        $('progress').style.width =
-          (100 * elapsed / DURATION) + '%';
-
-        const urgent =
-          startedAt !== null &&
-          remaining <= WARNING &&
-          !finished;
-
-        $('clockWrap').classList.toggle(
-          'urgent',
-          urgent
-        );
-
+        $('clock').textContent = formatClock(remaining);
+        $('progress').style.width = (100 * elapsed / DURATION) + '%';
+        const urgent = startedAt !== null && remaining <= WARNING && !finished;
+        $('clockWrap').classList.toggle('urgent', urgent);
         $('hint').textContent = startedAt === null
           ? 'El cronómetro empieza con tu primer clic'
-          : urgent
-            ? '¡Últimos 5 segundos!'
-            : '¡Sigue generando tokens!';
-
+          : urgent ? '¡Últimos 5 segundos!' : '¡Sigue generando tokens!';
         $('generate').disabled = finished;
       }
 
-      // FINALIZAR LA PARTIDA
-      function finish(
-        isRecord,
-        now = performance.now()
-      ) {
+      function finish() {
         if (finished) return;
-
         finished = true;
-
-        // Congelar tiempo inmediatamente
-        endedAt = now;
-
-        if (interval !== null) {
-          clearInterval(interval);
-          interval = null;
-        }
-
+        // La partida termina siempre cuando se cumplen los 15 segundos.
+        endedAt = startedAt + DURATION;
+        if (interval !== null) { clearInterval(interval); interval = null; }
         clearTimeout(messageTimer);
+        render(endedAt);
 
-        render(now);
-
-        // Elegir aspecto verde o dorado
-        $('result').classList.toggle(
-          'gold',
-          isRecord
-        );
-
+        // Solo al final comprobamos si hay récord.
+        const isRecord = count >= RECORD;
+        $('result').classList.toggle('gold', isRecord);
         $('finalCount').textContent = count;
-
-        $('trophy').textContent = isRecord
-          ? '👑🏆'
-          : '🏆';
-
+        $('trophy').textContent = isRecord ? '👑🏆' : '🏆';
         $('resultTitle').textContent = isRecord
-          ? '¡RÉCORD DE 100 TOKENS!'
-          : '¡Tiempo terminado!';
-
+          ? '¡RÉCORD DE 100 TOKENS!' : '¡Tiempo terminado!';
         $('resultIntro').textContent = isRecord
-          ? '¡Has alcanzado el objetivo especial!'
-          : 'Has generado un total de';
-
-        $('resultLabel').textContent = isRecord
-          ? 'tokens conseguidos antes del límite'
-          : 'tokens en 15 segundos';
-
+          ? '¡Has superado el reto especial!' : 'Has generado un total de';
+        $('resultLabel').textContent = 'tokens en 15 segundos';
         $('resultMessage').textContent = isRecord
           ? '✨ ¡INCREÍBLE! Has alcanzado el récord.'
           : '¿Puedes superar tu marca?';
-
         $('recordTime').hidden = !isRecord;
-
-        // Mostrar segundos restantes
-        if (isRecord) {
-          $('remainingRecord').textContent =
-            formatClock(
-              DURATION - (endedAt - startedAt)
-            );
+        if (isRecord && recordReachedAt !== null) {
+          // Guardamos el tiempo disponible al tocar el token 100,
+          // aunque después se siga jugando hasta el segundo 15.
+          $('remainingRecord').textContent = formatClock(
+            DURATION - (recordReachedAt - startedAt)
+          );
         }
-
-        // Permitir ver la explosión del token 100
-        const reduced = window.matchMedia(
-          '(prefers-reduced-motion: reduce)'
-        ).matches;
-
-        resultTimer = setTimeout(() => {
-          $('play').hidden = true;
-          $('result').hidden = false;
-        }, isRecord && !reduced ? 1000 : 0);
+        $('play').hidden = true;
+        $('result').hidden = false;
       }
 
-      // GENERAR TOKEN
       function generateToken() {
         if (finished) return;
-
         const now = performance.now();
-
-        // Impedir generar después del tiempo
-        if (
-          startedAt !== null &&
-          now - startedAt >= DURATION
-        ) {
-          finish(false, startedAt + DURATION);
+        if (startedAt !== null && now - startedAt >= DURATION) {
+          finish();
           return;
         }
-
-        // El tiempo empieza con el primer clic
         if (startedAt === null) {
           startedAt = now;
-
           interval = setInterval(() => {
             const current = performance.now();
-
             if (current - startedAt >= DURATION) {
-              finish(
-                false,
-                startedAt + DURATION
-              );
+              finish();
             } else {
               render(current);
             }
           }, 50);
         }
-
         count++;
-
-        // Explosión en 5, 10, 15...
+        if (count === RECORD) {
+          // NO terminamos la partida: guardamos el instante del récord.
+          recordReachedAt = now;
+        }
         if (count % BURST_EVERY === 0) {
-          $('message').textContent =
-            '🎉 ¡' + count +
-            ' tokens! ¡Explosión!';
-
+          $('message').textContent = count === RECORD
+            ? '🏆 ¡100 tokens! ¡Sigue hasta el final!'
+            : '🎉 ¡' + count + ' tokens! ¡Explosión!';
           explode();
-
           clearTimeout(messageTimer);
-
-          if (count < RECORD) {
-            messageTimer = setTimeout(() => {
-              if (!finished) {
-                $('message').textContent =
-                  '¡Sigue generando tokens!';
-              }
-            }, 1700);
-          }
+          messageTimer = setTimeout(() => {
+            if (!finished) $('message').textContent = '¡Sigue generando tokens!';
+          }, 1700);
         }
-
-        // RÉCORD DE 100 TOKENS
-        if (count >= RECORD) {
-          $('message').textContent =
-            '🏆 ¡RÉCORD ALCANZADO!';
-
-          // Parar cronómetro y activar dorado
-          finish(true, now);
-        } else {
-          render(now);
-        }
+        render(now);
       }
 
-      // REINICIAR
       function resetGame() {
-        if (interval !== null) {
-          clearInterval(interval);
-          interval = null;
-        }
-
+        if (interval !== null) { clearInterval(interval); interval = null; }
         clearTimeout(messageTimer);
-        clearTimeout(resultTimer);
-
         count = 0;
         startedAt = null;
         endedAt = null;
+        recordReachedAt = null;
         finished = false;
-
         $('particles').replaceChildren();
-
         $('big').classList.remove('boom');
         $('counter').classList.remove('glow');
         $('message').classList.remove('pop');
-
-        $('message').textContent =
-          '¿Cuántos tokens generas en 15 segundos?';
-
+        $('message').textContent = '¿Cuántos tokens generas en 15 segundos?';
         $('play').hidden = false;
         $('result').hidden = true;
-
         $('result').classList.remove('gold');
         $('recordTime').hidden = true;
-
         render();
       }
 
-      // BOTONES
-      $('generate').addEventListener(
-        'click',
-        generateToken
-      );
-
-      $('reset').addEventListener(
-        'click',
-        resetGame
-      );
-
-      $('again').addEventListener(
-        'click',
-        resetGame
-      );
-
+      $('generate').addEventListener('click', generateToken);
+      $('reset').addEventListener('click', resetGame);
+      $('again').addEventListener('click', resetGame);
       render();
     })();
   </script>
