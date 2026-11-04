@@ -5,12 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1223">
-  <title>ADAITS | Reto de tokens · 15 segundos</title>
+  <title>ADAITS | Reto de tokens</title>
 
   <style>
     :root {
       color-scheme: dark;
-      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      font-family: system-ui, -apple-system,
+                   "Segoe UI", sans-serif;
     }
 
     * { box-sizing: border-box; }
@@ -30,15 +31,15 @@
       max-width: 650px;
       padding: 30px 22px;
       text-align: center;
+      border: 1px solid #ffffff22;
+      border-radius: 18px;
+      overflow: hidden;
       background: radial-gradient(
         ellipse at top,
         #204776,
         #152642 48%,
         #0b1223
       );
-      border: 1px solid #ffffff22;
-      border-radius: 18px;
-      overflow: hidden;
     }
 
     [hidden] { display: none !important; }
@@ -47,9 +48,8 @@
 
     h1 {
       font-size: clamp(23px, 5vw, 32px);
-      line-height: 1.2;
       margin: 12px 0;
-      font-weight: 850;
+      line-height: 1.2;
     }
 
     .subtitle {
@@ -65,7 +65,7 @@
       margin: 15px 0 23px;
     }
 
-    /* CONTADOR DE TOKENS */
+    /* CONTADOR */
 
     .counter {
       position: relative;
@@ -77,31 +77,28 @@
       display: inline-block;
       position: relative;
       z-index: 2;
-      color: #7dd3fc;
       font-size: clamp(74px, 14vw, 108px);
       font-weight: 850;
       letter-spacing: -3px;
       font-variant-numeric: tabular-nums;
       line-height: 1.1;
+      color: #7dd3fc;
     }
 
     .count-label {
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       gap: 8px;
       margin: 8px 0;
       color: #dbeafe;
       font-size: 15px;
     }
 
-    /* ICONO HEXAGONAL */
-
-    .token,
-    .particle {
+    .token, .particle {
       display: inline-flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       flex-shrink: 0;
       clip-path: polygon(
         50% 0%,
@@ -111,7 +108,9 @@
         6% 75%,
         6% 25%
       );
-      background: linear-gradient(140deg, #7dd3fc, #2563eb);
+      background: linear-gradient(
+        140deg, #7dd3fc, #2563eb
+      );
       color: #e0f2fe;
       font-weight: 900;
     }
@@ -129,19 +128,19 @@
     }
 
     .milestone {
+      min-height: 24px;
       margin: 13px 0 2px;
       color: #93c5fd;
       font-size: 14px;
       font-weight: 750;
-      min-height: 24px;
     }
 
     .milestone.pop {
-      animation: message-pop .55s ease-out;
       color: #fde68a;
+      animation: pop .55s ease-out;
     }
 
-    /* CRONÓMETRO DE 15 SEGUNDOS */
+    /* CRONÓMETRO */
 
     .clock-wrap {
       margin: 16px 0 0;
@@ -156,9 +155,8 @@
     .clock {
       font-size: clamp(36px, 8vw, 48px);
       font-weight: 900;
-      color: #f8fafc;
+      color: white;
       font-variant-numeric: tabular-nums;
-      line-height: 1.2;
       margin: 4px 0;
     }
 
@@ -168,11 +166,9 @@
       min-height: 18px;
     }
 
-    /* ÚLTIMOS 5 SEGUNDOS EN AMARILLO */
-
     .clock-wrap.urgent .clock {
       color: #fbbf24;
-      animation: urgent-pulse .7s ease-in-out infinite;
+      animation: urgent .7s ease-in-out infinite;
     }
 
     .clock-wrap.urgent .hint {
@@ -180,32 +176,24 @@
       font-weight: 800;
     }
 
-    @keyframes urgent-pulse {
-      50% {
-        opacity: .6;
-        transform: scale(1.05);
-        text-shadow: 0 0 24px #fbbf24a0;
-      }
-    }
-
-    /* BARRA DE TIEMPO */
-
     .track {
       height: 12px;
-      background: #34455c;
-      overflow: hidden;
-      border-radius: 99px;
       margin: 19px 0 27px;
+      border-radius: 99px;
+      overflow: hidden;
+      background: #34455c;
     }
 
     #progress {
       height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      width: 0;
       border-radius: 99px;
+      background: linear-gradient(
+        90deg, #0284c7, #38bdf8
+      );
     }
 
-    /* BOTÓN GENERAR TOKEN */
+    /* BOTÓN */
 
     button {
       font: inherit;
@@ -218,6 +206,11 @@
       transform: scale(.97);
     }
 
+    button:disabled {
+      opacity: .55;
+      cursor: default;
+    }
+
     .generate {
       display: flex;
       align-items: center;
@@ -226,25 +219,31 @@
       width: 100%;
       min-height: 83px;
       padding: 17px 12px;
-      background: linear-gradient(180deg, #fbbf24, #fb923c);
+      background: linear-gradient(
+        180deg, #fbbf24, #fb923c
+      );
       border: 2px solid #fbbf24;
       color: #451a03;
       font-size: clamp(19px, 4.2vw, 24px);
-      box-shadow: 0 5px 0 #b45309, 0 10px 24px #0004;
+      box-shadow:
+        0 5px 0 #b45309,
+        0 10px 24px #0004;
       touch-action: manipulation;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .plus {
-      color: white;
-      background: #78350f;
-      border: 1px solid #92400e;
-      border-radius: 99px;
-      padding: 7px 12px;
-      font-size: 17px;
       min-width: 48px;
+      padding: 7px 12px;
+      border-radius: 99px;
+      border: 1px solid #92400e;
+      background: #78350f;
+      color: white;
+      font-size: 17px;
     }
 
-    /* EXPLOSIÓN CADA 5 TOKENS */
+    /* EXPLOSIONES */
 
     .particles {
       position: absolute;
@@ -261,17 +260,18 @@
       height: var(--size);
       font-size: calc(var(--size) * .52);
       opacity: 0;
-      animation: token-fly 1.15s ease-out forwards;
+      animation: fly 1.15s ease-out forwards;
     }
 
     .big.boom {
-      animation: number-boom .7s ease-out;
+      animation: boom .7s ease-out;
     }
 
     .counter.glow::before {
       content: "";
       position: absolute;
       inset: 4% 14%;
+      z-index: 0;
       border-radius: 50%;
       background: radial-gradient(
         circle,
@@ -279,14 +279,14 @@
         #38bdf825 38%,
         transparent 73%
       );
-      z-index: 0;
       animation: halo .9s ease-out forwards;
     }
 
-    @keyframes token-fly {
+    @keyframes fly {
       0% {
         opacity: 0;
-        transform: translate(-50%, -50%) scale(.3);
+        transform:
+          translate(-50%, -50%) scale(.3);
       }
 
       15%, 65% {
@@ -302,12 +302,7 @@
       }
     }
 
-    @keyframes number-boom {
-      0% {
-        transform: scale(1);
-        color: #7dd3fc;
-      }
-
+    @keyframes boom {
       28% {
         transform: scale(1.23);
         color: #e0f2fe;
@@ -320,7 +315,21 @@
       }
     }
 
-    @keyframes message-pop {
+    @keyframes halo {
+      0% {
+        opacity: 0;
+        transform: scale(.5);
+      }
+
+      40% { opacity: 1; }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
+    }
+
+    @keyframes pop {
       0% {
         opacity: .2;
         transform: scale(.86);
@@ -332,46 +341,39 @@
       }
 
       100% {
-        opacity: 1;
         transform: scale(1);
       }
     }
 
-    @keyframes halo {
-      0% {
-        opacity: 0;
-        transform: scale(.5);
-      }
-
-      40% {
-        opacity: 1;
-      }
-
-      100% {
-        opacity: 0;
-        transform: scale(1.3);
+    @keyframes urgent {
+      50% {
+        opacity: .6;
+        transform: scale(1.05);
+        text-shadow: 0 0 24px #fbbf24a0;
       }
     }
 
-    /* RESULTADO FINAL */
+    /* RESULTADO NORMAL: VERDE */
 
     .result {
       padding: 19px 18px 30px;
       margin: 20px 0 26px;
-      background: linear-gradient(160deg, #065f46, #064e3b);
       border: 1px solid #34d399;
       border-radius: 15px;
+      background: linear-gradient(
+        160deg, #065f46, #064e3b
+      );
       box-shadow: 0 0 28px #34d39918;
-      animation: result-in .45s ease-out;
+      animation: reveal .45s ease-out;
     }
 
     .replay {
       display: block;
       margin: 0 auto 21px;
-      padding: 12px 22px;
       min-height: 43px;
-      color: white;
+      padding: 12px 22px;
       background: #047857;
+      color: white;
       border: 1px solid #6ee7b7;
     }
 
@@ -380,14 +382,14 @@
     }
 
     .result h2 {
-      font-size: clamp(21px, 5vw, 27px);
       margin: 12px 0 8px;
+      font-size: clamp(21px, 5vw, 27px);
     }
 
     .result p {
+      margin-bottom: 4px;
       color: #d1fae5;
       font-size: 14px;
-      margin-bottom: 4px;
     }
 
     .result-count {
@@ -395,8 +397,8 @@
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       color: #6ee7b7;
-      text-shadow: 0 0 27px #34d39955;
       line-height: 1.15;
+      text-shadow: 0 0 27px #34d39955;
     }
 
     .result-label {
@@ -416,7 +418,69 @@
       font-weight: 800;
     }
 
-    @keyframes result-in {
+    /* NUEVO: RÉCORD DORADO */
+
+    .result.gold {
+      border: 2px solid #facc15;
+      background: radial-gradient(
+        ellipse at top,
+        #a16207,
+        #713f12 62%,
+        #422006
+      );
+      box-shadow:
+        0 0 34px #facc1555,
+        inset 0 0 24px #fde68a16;
+    }
+
+    .result.gold .replay {
+      background: #854d0e;
+      color: #fff7cc;
+      border-color: #fde68a;
+    }
+
+    .result.gold .trophy {
+      filter: drop-shadow(0 0 15px #fde047bb);
+    }
+
+    .result.gold h2 {
+      color: #fef08a;
+    }
+
+    .result.gold p {
+      color: #fff1b6;
+    }
+
+    .result.gold .result-count {
+      color: #fef08a;
+      text-shadow: 0 0 30px #facc1599;
+    }
+
+    .result.gold .result-label {
+      color: #fef3c7;
+    }
+
+    .result.gold .result-message {
+      color: #fff7cc;
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .record-time {
+      margin-top: 14px;
+      font-size: 15px;
+      color: #fef3c7;
+    }
+
+    .record-time strong {
+      display: block;
+      margin-top: 5px;
+      font-size: 32px;
+      color: #fef08a;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @keyframes reveal {
       from {
         opacity: 0;
         transform: translateY(12px) scale(.96);
@@ -428,12 +492,12 @@
       }
     }
 
-    /* PIE DE PÁGINA */
+    /* PIE */
 
     .bottom {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 12px;
       margin: 27px 0 18px;
       color: #b4c5d9;
@@ -457,35 +521,23 @@
       line-height: 1.9;
     }
 
-    /* ACCESIBILIDAD Y MÓVILES */
-
     @media (prefers-reduced-motion: reduce) {
       .particle,
       .big.boom,
       .milestone.pop,
       .counter.glow::before,
-      .result,
-      .clock-wrap.urgent .clock {
+      .clock-wrap.urgent .clock,
+      .result {
         animation: none;
       }
 
-      .particle {
-        display: none;
-      }
+      .particle { display: none; }
     }
 
     @media (max-width: 400px) {
-      .game {
-        padding: 23px 12px;
-      }
-
-      .generate {
-        gap: 8px;
-      }
-
-      .plus {
-        padding: 6px 9px;
-      }
+      .game { padding: 23px 12px; }
+      .generate { gap: 8px; }
+      .plus { padding: 6px 9px; }
     }
   </style>
 </head>
@@ -513,9 +565,11 @@
 
       <div class="counter" id="counter">
 
-        <div class="particles"
-             id="particles"
-             aria-hidden="true"></div>
+        <div
+          class="particles"
+          id="particles"
+          aria-hidden="true"
+        ></div>
 
         <div class="big" id="big">
           <span id="count">0</span>
@@ -564,7 +618,7 @@
 
     </section>
 
-    <!-- RESULTADO FINAL -->
+    <!-- RESULTADO VERDE O DORADO -->
 
     <section class="result" id="result" hidden>
 
@@ -576,11 +630,17 @@
         ↻ Volver a jugar
       </button>
 
-      <div class="trophy">🏆</div>
+      <div class="trophy" id="trophy">
+        🏆
+      </div>
 
-      <h2>¡Tiempo terminado!</h2>
+      <h2 id="resultTitle">
+        ¡Tiempo terminado!
+      </h2>
 
-      <p>Has generado un total de</p>
+      <p id="resultIntro">
+        Has generado un total de
+      </p>
 
       <div class="result-count" id="finalCount">
         0
@@ -588,20 +648,28 @@
 
       <div class="result-label">
         <span class="token mini">T</span>
-        tokens en 15 segundos
+        <span id="resultLabel">
+          tokens en 15 segundos
+        </span>
       </div>
 
-      <div class="result-message">
+      <div class="result-message" id="resultMessage">
         ¿Puedes superar tu marca?
+      </div>
+
+      <!-- TIEMPO RESTANTE: SOLO EN EL RÉCORD -->
+
+      <div class="record-time" id="recordTime" hidden>
+        ⏱ Tiempo que te ha sobrado
+        <strong id="remainingRecord">00:00.0</strong>
       </div>
 
     </section>
 
-    <!-- REINICIO Y PIE -->
-
     <div class="bottom">
-
-      <span>⚡ Reto: generar tokens en 15 s</span>
+      <span>
+        ⚡ Reto: 15 s · Récord especial: 100 tokens
+      </span>
 
       <button
         class="reset"
@@ -610,7 +678,6 @@
       >
         ↻ Reiniciar
       </button>
-
     </div>
 
     <div class="footer">
@@ -624,49 +691,45 @@
 
   <script>
     (() => {
-
       const $ = id => document.getElementById(id);
 
       // CONFIGURACIÓN
-      const DURATION = 15000;    // 15 segundos
-      const WARNING = 5000;      // Últimos 5 segundos
-      const BURST_EVERY = 5;     // Explosión cada 5 tokens
+      const DURATION = 15000;
+      const WARNING = 5000;
+      const BURST_EVERY = 5;
+      const RECORD = 100;
 
       // ESTADO DEL JUEGO
       let count = 0;
       let startedAt = null;
+      let endedAt = null;
       let finished = false;
+
       let interval = null;
       let messageTimer = null;
+      let resultTimer = null;
 
-      // FORMATO DEL TIEMPO
+      // FORMATO DEL RELOJ
       function formatClock(ms) {
-
-        const remaining = Math.max(
+        const time = Math.max(
           0,
           Math.min(DURATION, ms)
         );
 
-        const seconds = Math.floor(remaining / 1000);
+        const seconds = Math.floor(time / 1000);
 
-        const minutes = String(
-          Math.floor(seconds / 60)
-        ).padStart(2, '0');
-
-        const secs = String(
-          seconds % 60
-        ).padStart(2, '0');
-
-        const tenths = Math.floor(
-          (remaining % 1000) / 100
+        return (
+          String(Math.floor(seconds / 60))
+            .padStart(2, '0') +
+          ':' +
+          String(seconds % 60).padStart(2, '0') +
+          '.' +
+          Math.floor((time % 1000) / 100)
         );
-
-        return minutes + ':' + secs + '.' + tenths;
       }
 
-      // REINICIAR ANIMACIÓN
+      // REPETIR ANIMACIÓN
       function replay(element, className) {
-
         element.classList.remove(className);
 
         void element.offsetWidth;
@@ -674,27 +737,26 @@
         element.classList.add(className);
       }
 
-      // EXPLOSIÓN DE TOKENS
+      // EXPLOSIÓN CADA 5 TOKENS
       function explode() {
-
         replay($('big'), 'boom');
         replay($('counter'), 'glow');
         replay($('message'), 'pop');
 
-        const reducedMotion = window.matchMedia(
-          '(prefers-reduced-motion: reduce)'
-        ).matches;
+        if (
+          window.matchMedia(
+            '(prefers-reduced-motion: reduce)'
+          ).matches
+        ) {
+          return;
+        }
 
-        if (reducedMotion) return;
-
-        const container = $('particles');
+        const area = $('particles');
 
         for (let i = 0; i < 20; i++) {
-
           const token = document.createElement('span');
 
           const angle = i * Math.PI / 10;
-
           const distance = 95 + Math.random() * 100;
 
           token.className = 'particle';
@@ -725,29 +787,31 @@
             Math.round(19 + Math.random() * 17) + 'px'
           );
 
-          container.appendChild(token);
+          area.appendChild(token);
 
           setTimeout(() => token.remove(), 1250);
         }
       }
 
-      // ACTUALIZAR PANTALLA
+      // ACTUALIZAR LA PANTALLA
       function render(now = performance.now()) {
-
         const elapsed = startedAt === null
           ? 0
-          : Math.min(DURATION, now - startedAt);
+          : Math.min(
+              DURATION,
+              (endedAt ?? now) - startedAt
+            );
 
         const remaining = DURATION - elapsed;
 
         $('count').textContent = count;
 
-        $('clock').textContent = formatClock(remaining);
+        $('clock').textContent =
+          formatClock(remaining);
 
         $('progress').style.width =
           (100 * elapsed / DURATION) + '%';
 
-        // Activar amarillo solo en últimos 5 segundos
         const urgent =
           startedAt !== null &&
           remaining <= WARNING &&
@@ -763,14 +827,21 @@
           : urgent
             ? '¡Últimos 5 segundos!'
             : '¡Sigue generando tokens!';
+
+        $('generate').disabled = finished;
       }
 
       // FINALIZAR LA PARTIDA
-      function finish() {
-
+      function finish(
+        isRecord,
+        now = performance.now()
+      ) {
         if (finished) return;
 
         finished = true;
+
+        // Congelar tiempo inmediatamente
+        endedAt = now;
 
         if (interval !== null) {
           clearInterval(interval);
@@ -779,84 +850,137 @@
 
         clearTimeout(messageTimer);
 
+        render(now);
+
+        // Elegir aspecto verde o dorado
+        $('result').classList.toggle(
+          'gold',
+          isRecord
+        );
+
         $('finalCount').textContent = count;
 
-        // Sustituir juego por panel verde
-        $('play').hidden = true;
-        $('result').hidden = false;
+        $('trophy').textContent = isRecord
+          ? '👑🏆'
+          : '🏆';
+
+        $('resultTitle').textContent = isRecord
+          ? '¡RÉCORD DE 100 TOKENS!'
+          : '¡Tiempo terminado!';
+
+        $('resultIntro').textContent = isRecord
+          ? '¡Has alcanzado el objetivo especial!'
+          : 'Has generado un total de';
+
+        $('resultLabel').textContent = isRecord
+          ? 'tokens conseguidos antes del límite'
+          : 'tokens en 15 segundos';
+
+        $('resultMessage').textContent = isRecord
+          ? '✨ ¡INCREÍBLE! Has alcanzado el récord.'
+          : '¿Puedes superar tu marca?';
+
+        $('recordTime').hidden = !isRecord;
+
+        // Mostrar segundos restantes
+        if (isRecord) {
+          $('remainingRecord').textContent =
+            formatClock(
+              DURATION - (endedAt - startedAt)
+            );
+        }
+
+        // Permitir ver la explosión del token 100
+        const reduced = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+        resultTimer = setTimeout(() => {
+          $('play').hidden = true;
+          $('result').hidden = false;
+        }, isRecord && !reduced ? 1000 : 0);
       }
 
       // GENERAR TOKEN
       function generateToken() {
-
         if (finished) return;
 
         const now = performance.now();
 
-        // No permitir tokens fuera de tiempo
+        // Impedir generar después del tiempo
         if (
           startedAt !== null &&
           now - startedAt >= DURATION
         ) {
-          finish();
+          finish(false, startedAt + DURATION);
           return;
         }
 
-        // El cronómetro comienza con el primer clic
+        // El tiempo empieza con el primer clic
         if (startedAt === null) {
-
           startedAt = now;
 
           interval = setInterval(() => {
-
             const current = performance.now();
 
             if (current - startedAt >= DURATION) {
-              finish();
+              finish(
+                false,
+                startedAt + DURATION
+              );
             } else {
               render(current);
             }
-
           }, 50);
         }
 
         count++;
 
-        // Explosión cada 5 tokens
+        // Explosión en 5, 10, 15...
         if (count % BURST_EVERY === 0) {
-
           $('message').textContent =
-            '🎉 ¡' + count + ' tokens! ¡Explosión!';
+            '🎉 ¡' + count +
+            ' tokens! ¡Explosión!';
 
           explode();
 
           clearTimeout(messageTimer);
 
-          messageTimer = setTimeout(() => {
-
-            if (!finished) {
-              $('message').textContent =
-                '¡Sigue generando tokens!';
-            }
-
-          }, 1700);
+          if (count < RECORD) {
+            messageTimer = setTimeout(() => {
+              if (!finished) {
+                $('message').textContent =
+                  '¡Sigue generando tokens!';
+              }
+            }, 1700);
+          }
         }
 
-        render(now);
+        // RÉCORD DE 100 TOKENS
+        if (count >= RECORD) {
+          $('message').textContent =
+            '🏆 ¡RÉCORD ALCANZADO!';
+
+          // Parar cronómetro y activar dorado
+          finish(true, now);
+        } else {
+          render(now);
+        }
       }
 
       // REINICIAR
       function resetGame() {
-
         if (interval !== null) {
           clearInterval(interval);
           interval = null;
         }
 
         clearTimeout(messageTimer);
+        clearTimeout(resultTimer);
 
         count = 0;
         startedAt = null;
+        endedAt = null;
         finished = false;
 
         $('particles').replaceChildren();
@@ -871,10 +995,13 @@
         $('play').hidden = false;
         $('result').hidden = true;
 
+        $('result').classList.remove('gold');
+        $('recordTime').hidden = true;
+
         render();
       }
 
-      // EVENTOS
+      // BOTONES
       $('generate').addEventListener(
         'click',
         generateToken
@@ -890,11 +1017,8 @@
         resetGame
       );
 
-      // ESTADO INICIAL
       render();
-
     })();
   </script>
-
 </body>
 </html>
