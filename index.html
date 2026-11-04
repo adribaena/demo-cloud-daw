@@ -2,75 +2,442 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ADAITS | Demo Cloud Computing</title>
-  <style>
-    :root {
-      font-family: system-ui, sans-serif;
-      color-scheme: dark;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: radial-gradient(circle at top, #1b4176, #0b1223 65%);
-      color: #f8fafc;
-    }
-    main {
-      max-width: 640px;
-      width: 100%;
-      padding: 44px 36px;
-      border-radius: 24px;
-      background: #ffffff12;
-      border: 1px solid #ffffff30;
-      text-align: center;
-    }
-    .cloud { font-size: 64px; }
-    h1 { font-size: 40px; }
-    p { color: #cbd5e1; line-height: 1.6; }
-    button {
-      border: 0;
-      background: #38bdf8;
-      color: #082f49;
-      font-weight: bold;
-      border-radius: 12px;
-      padding: 14px 22px;
-      cursor: pointer;
-    }
-    #counter {
-      font-size: 38px;
-      font-weight: bold;
-      color: #7dd3fc;
-      margin: 15px;
-    }
-    small { color: #94a3b8; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ADAITS | Cloud Cookie Clicker</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px;
+  display: grid;
+  place-items: center;
+  font-family: system-ui, sans-serif;
+  color: white;
+  background: radial-gradient(circle at top, #1b4176, #0b1223 70%);
+}
+
+main {
+  width: 100%;
+  max-width: 570px;
+  padding: 30px;
+  text-align: center;
+  background: #ffffff12;
+  border: 1px solid #ffffff30;
+  border-radius: 24px;
+}
+
+h1 { margin: 12px 0; }
+p { color: #cbd5e1; }
+
+.subtitle {
+  color: #7dd3fc;
+  font-weight: bold;
+}
+
+.counter {
+  margin: 15px 0 0;
+  font-size: 56px;
+  font-weight: 800;
+  color: #7dd3fc;
+}
+
+small { color: #94a3b8; }
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 8px 0;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#clickBtn {
+  background: #38bdf8;
+  color: #082f49;
+}
+
+#buyBtn {
+  width: 100%;
+  background: #155e75;
+  color: white;
+}
+
+#resetBtn {
+  background: #334155;
+  color: white;
+}
+
+.panel {
+  margin-top: 20px;
+  padding: 18px;
+  background: #0f2139;
+  border: 1px solid #334155;
+  border-radius: 14px;
+}
+
+.progress {
+  height: 12px;
+  background: #334155;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+#progressBar {
+  width: 0%;
+  height: 100%;
+  background: #38bdf8;
+  transition: width 0.2s;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.stats div {
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+.stats strong {
+  display: block;
+  color: #7dd3fc;
+  font-size: 19px;
+}
+
+#victory {
+  display: none;
+  padding: 22px;
+  margin-top: 20px;
+  border: 1px solid #34d399;
+  background: #064e3b;
+  border-radius: 15px;
+}
+
+#finalTime {
+  font-size: 35px;
+  color: #6ee7b7;
+  font-weight: bold;
+}
+
+.footer {
+  margin-top: 22px;
+  padding-top: 15px;
+  border-top: 1px solid #334155;
+  font-size: 12px;
+  color: #94a3b8;
+}
+</style>
 </head>
+
 <body>
-  <main>
-    <div class="cloud">☁️</div>
-    <h1>Cloud Computing en acción</h1>
-    <p><strong>Demo ADAITS · 1.º DAW + IA</strong></p>
-    <p>Una web publicada en <strong>Microsoft Azure</strong>,
-       sin administrar servidores.</p>
 
-    <p>¡Prueba el contador!</p>
-    <div id="counter">0</div>
-    <button id="btn">Sumar un clic</button>
+<main>
+  <div style="font-size:55px">☁️</div>
 
-    <p><small>GitHub → Azure → Internet</small></p>
-    <p><small>Al recargar, el contador vuelve a cero:
-       no hay backend.</small></p>
-  </main>
-  <script>
-    let clicks = 0;
-    document.getElementById('btn').addEventListener('click', () => {
-      document.getElementById('counter').textContent = ++clicks;
-    });
-  </script>
+  <h1>Cloud Computing en acción</h1>
+  <div class="subtitle">Demo ADAITS · 1.º DAW + IA</div>
+
+  <p>
+    Consigue 1.000 galletas automatizando
+    tu producción en la nube.
+  </p>
+
+  <div class="counter" id="cookies">0</div>
+  <small>🍪 Galletas disponibles</small>
+
+  <br><br>
+
+  <button id="clickBtn" onclick="manualClick()">
+    🍪 Sumar una galleta
+  </button>
+
+  <div class="panel">
+    <strong>🎯 Objetivo: 1.000 galletas</strong>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <small id="progressText">0 / 1.000 producidas</small>
+
+    <div class="stats">
+      <div>
+        Producción
+        <strong id="production">0 / 5s</strong>
+      </div>
+
+      <div>
+        Mejoras
+        <strong id="upgrades">0</strong>
+      </div>
+
+      <div>
+        Tiempo
+        <strong id="timer">00:00.0</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel" id="shop">
+    <h3>⚡ Automatización</h3>
+
+    <p id="unlockText">
+      🔒 Consigue 10 galletas para
+      desbloquear la producción automática.
+    </p>
+
+    <button id="buyBtn"
+            onclick="buyUpgrade()" disabled>
+      Comprar +2 / 5s · 20 🍪
+    </button>
+
+    <p><small>
+      Cada mejora aumenta la producción,
+      pero también el precio siguiente.
+    </small></p>
+  </div>
+
+  <div id="victory">
+    <div style="font-size:45px">🏆</div>
+
+    <h2>¡Reto Cloud completado!</h2>
+
+    <p>¡Has producido 1.000 galletas!</p>
+
+    <div id="finalTime">00:00.0</div>
+    <small>Tiempo total</small>
+
+    <p id="finalStats"></p>
+
+    <button id="resetBtn" onclick="resetGame()">
+      🔄 Volver a jugar
+    </button>
+  </div>
+
+  <div class="footer">
+    GitHub → Microsoft Azure → Internet
+    <br>
+    Sin backend ni base de datos
+  </div>
+</main>
+
+<script>
+
+// CONFIGURACIÓN
+const GOAL = 1000;
+const INTERVAL = 5000;
+
+// ESTADO DEL JUEGO
+let cookies = 0;
+let totalProduced = 0;
+let upgrades = 0;
+let upgradePrice = 20;
+
+let unlocked = false;
+let finished = false;
+
+let startTime = null;
+let nextAutoTime = null;
+let finalElapsed = 0;
+
+// ELEMENTOS
+const $ = id => document.getElementById(id);
+
+// FORMATO DEL TIEMPO
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const tenths = Math.floor((ms % 1000) / 100);
+
+  const pad = n => String(n).padStart(2, "0");
+
+  if (hours > 0) {
+    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}.${tenths}`;
+  }
+
+  return `${pad(minutes)}:${pad(seconds)}.${tenths}`;
+}
+
+// SUMAR GALLETAS
+function earn(amount, now = Date.now()) {
+  if (finished) return;
+
+  // El cronómetro comienza con el primer clic.
+  if (startTime === null) {
+    startTime = now;
+  }
+
+  const remaining = GOAL - totalProduced;
+  const earned = Math.min(amount, remaining);
+
+  cookies += earned;
+  totalProduced += earned;
+
+  // DESBLOQUEO AUTOMÁTICO
+  if (!unlocked && totalProduced >= 10) {
+    unlocked = true;
+    nextAutoTime = now + INTERVAL;
+  }
+
+  // VICTORIA
+  if (totalProduced >= GOAL) {
+    finishGame(now);
+  }
+
+  render();
+}
+
+// CLIC MANUAL
+function manualClick() {
+  earn(1);
+}
+
+// COMPRAR MEJORAS
+function buyUpgrade() {
+  if (finished || !unlocked) return;
+  if (cookies < upgradePrice) return;
+
+  cookies -= upgradePrice;
+  upgrades++;
+
+  // El precio aumenta un 50%.
+  upgradePrice = Math.ceil(upgradePrice * 1.5);
+
+  render();
+}
+
+// PRODUCCIÓN AUTOMÁTICA
+function autoProduction(now) {
+  if (!unlocked || finished) return;
+  if (now < nextAutoTime) return;
+
+  // +1 base y +2 por cada mejora.
+  const production = 1 + upgrades * 2;
+
+  // Número de ciclos transcurridos.
+  const cycles =
+    Math.floor((now - nextAutoTime) / INTERVAL) + 1;
+
+  nextAutoTime += cycles * INTERVAL;
+
+  earn(production * cycles, now);
+}
+
+// TERMINAR PARTIDA
+function finishGame(now) {
+  finished = true;
+
+  finalElapsed = now - startTime;
+
+  $("victory").style.display = "block";
+  $("shop").style.display = "none";
+
+  $("clickBtn").disabled = true;
+  $("clickBtn").textContent = "🏆 Reto completado";
+
+  $("finalTime").textContent = formatTime(finalElapsed);
+
+  $("finalStats").textContent =
+    `Mejoras compradas: ${upgrades} · ` +
+    `Producción final: ${1 + upgrades * 2} galletas / 5s`;
+}
+
+// ACTUALIZAR INTERFAZ
+function render() {
+  $("cookies").textContent =
+    cookies.toLocaleString("es-ES");
+
+  $("progressText").textContent =
+    `${totalProduced.toLocaleString("es-ES")} / 1.000 producidas`;
+
+  $("progressBar").style.width =
+    `${(totalProduced / GOAL) * 100}%`;
+
+  $("production").textContent =
+    unlocked ? `${1 + upgrades * 2} / 5s` : "0 / 5s";
+
+  $("upgrades").textContent = upgrades;
+
+  if (!finished && startTime !== null) {
+    $("timer").textContent =
+      formatTime(Date.now() - startTime);
+  }
+
+  if (finished) {
+    $("timer").textContent = formatTime(finalElapsed);
+  }
+
+  if (unlocked && !finished) {
+    $("unlockText").textContent =
+      "✅ Producción automática desbloqueada.";
+  }
+
+  $("buyBtn").disabled =
+    !unlocked || finished || cookies < upgradePrice;
+
+  $("buyBtn").textContent =
+    `Comprar +2 / 5s · ${upgradePrice} 🍪`;
+}
+
+// REINICIAR
+function resetGame() {
+  cookies = 0;
+  totalProduced = 0;
+  upgrades = 0;
+  upgradePrice = 20;
+
+  unlocked = false;
+  finished = false;
+  startTime = null;
+  nextAutoTime = null;
+  finalElapsed = 0;
+
+  $("victory").style.display = "none";
+  $("shop").style.display = "block";
+
+  $("clickBtn").disabled = false;
+  $("clickBtn").textContent = "🍪 Sumar una galleta";
+
+  $("unlockText").textContent =
+    "🔒 Consigue 10 galletas para desbloquear " +
+    "la producción automática.";
+
+  $("timer").textContent = "00:00.0";
+
+  render();
+}
+
+// BUCLE DEL JUEGO
+setInterval(() => {
+  if (finished) return;
+
+  const now = Date.now();
+
+  autoProduction(now);
+  render();
+
+}, 100);
+
+render();
+
+</script>
 </body>
 </html>
