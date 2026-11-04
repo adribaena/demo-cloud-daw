@@ -459,7 +459,7 @@
         <div class="burst-area" id="burst" aria-hidden="true"></div>
 
         <div class="big-number" id="bigNumber">
-          <span id="count">0</span><span class="denom">/30</span>
+          <span id="count">0</span><span class="denom">/20</span>
         </div>
 
         <div class="count-label">
@@ -468,7 +468,7 @@
         </div>
 
         <div class="milestone" id="milestone" aria-live="polite">
-          ¡Genera 30 tokens!
+          ¡Genera 20 tokens!
         </div>
       </div>
 
@@ -497,7 +497,7 @@
     <section class="victory" id="victory" hidden>
       <div class="trophy">🏆</div>
       <h2>¡Objetivo conseguido!</h2>
-      <p>¡Has generado 30 tokens!</p>
+      <p>¡Has generado 20 tokens!</p>
 
       <div class="time-label">⏱ Tiempo total</div>
       <div class="final-time" id="finalTime">00:00.0</div>
@@ -509,7 +509,7 @@
     </section>
 
     <div class="bottom">
-      <span>🎯 Objetivo: 30 tokens</span>
+      <span>🎯 Objetivo: 20 tokens</span>
       <button type="button" class="reset" id="resetBtn">
         ↻ Reiniciar
       </button>
@@ -528,9 +528,9 @@
       const $ = id => document.getElementById(id);
 
       // CONFIGURACIÓN DEL JUEGO
-      const GOAL = 30;
+      const GOAL = 20;
       const BURST_EVERY = 5;
-      const MAX_TIME = 120000; // 2 minutos
+      const MAX_TIME = 60000; // 1 minuto
 
       let count = 0;
       let startedAt = null;
@@ -649,10 +649,10 @@
 
         count++;
 
-        // Explosión en 5, 10, 15, 20, 25 y 30
+        // Explosión en 5, 10, 15 y 20
         if (count % BURST_EVERY === 0) {
           $('milestone').textContent = count === GOAL
-            ? '🎉 ¡30 tokens! ¡Objetivo cumplido!'
+            ? '🎉 ¡20 tokens! ¡Objetivo cumplido!'
             : '🎉 ¡' + count + ' tokens! ¡Explosión!';
 
           explode();
@@ -713,7 +713,7 @@
         $('counterArea').classList.remove('glow');
         $('milestone').classList.remove('celebrate');
 
-        $('milestone').textContent = '¡Genera 30 tokens!';
+        $('milestone').textContent = '¡Genera 20 tokens!';
 
         $('play').hidden = false;
         $('victory').hidden = true;
